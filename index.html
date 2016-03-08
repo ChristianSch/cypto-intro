@@ -106,7 +106,7 @@
             keys. This assumes however, that the attacker does know which scheme was used
             in the first place.</p>
 
-            <h4 class="example" id="def-kp">Definition: Kerckhoff's Principle<a
+            <h4 class="definition" id="def-kp">Definition: Kerckhoff's Principle<a
                     class="anchor-link" href="#def-kp"></a></h4>
             <p>The encryption scheme itself is not secret. The only secret is the key
             which must be chosen at random and kept secret. This principle is
@@ -116,9 +116,36 @@
             participators. Additionally it is easier to deploy and its open approach
             leads to public validation if the algorithm is known.</p>
 
-            <p>Note that the key space should be large enough to prevent brute force and
-            exhaustive search attacks. However, a large key space does not guarantee
-            safety.</p>
+            <h4 class="definition" id="def-sksp">Definition: Sufficient Key Space Principle<a
+                    class="anchor-link" href="#def-sksp"></a></h4>
+            <p>A too small key space for an encryption scheme is vulnerable to
+            exhaustive-search attacks. However, large key spaces do not guarantee
+            security.</p>
+
+            <h4 class="example" id="ex-vc">Example: The Vigenère Cipher<a
+                    class="anchor-link" href="#ex-vc"></a></h4>
+            <p>The key is now a string, not just a character. To encrypt a message the
+            characters are shifted by the respective character of the key, which is
+            repeated in a wrap around manner for messages longer than the key. Decryption
+            is again just the reverse operation.</p>
+            <p>The key space for this scheme with a key size of $14$ is
+            $26^{14} \approx 2^66$ which renders brute-force search attacks useless. The
+            scheme however is not secure as it can be attacked differently.</p>
+            <p>Suppose a key of length 14. Then every 14th character in the ciphertext
+            was shifted the same amount. Together with plain text letter frequencies the
+            following algorithm can be applied:</p>
+            <ul>
+                <li>Look at every 14th character, starting with the first</li>
+                <li>Let $\alpha$ be the most common character appearing in this portion
+                    of the ciphertext</li>
+                <li>Most likely, this character corresponds to the most common plaintext
+                    character $e$. Guess the first character of the key
+                    is $\alpha - e$</li>
+                <li>Repeat for remaining positions</li>
+            </ul>
+
+            <p>There are better (but more complicated) attacks available for this scheme,
+            however this attack will work for long enough Vigenère ciphers.</p>
 
             <footer class="main-foot">
                 <ul>
