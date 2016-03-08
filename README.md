@@ -1,2 +1,2 @@
-# machine-learning-cheat-sheet
-Cheat sheet for the machine learning course at Coursera by Prof. Ng
+# intro-to-crypto-cheat-sheet
+Cheat sheet for the crypto intro course at Coursera
