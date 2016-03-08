@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Introduction to Cryptography @ Coursera - A Cheat Sheet</title>
+
+        <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+
+        <!-- typeplate -->
+        <link rel="stylesheet" href="css/typeplate.css" type="text/css" media="all">
+
+        <!-- MathJax -->
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+                extensions: ["tex2jax.js"],
+                jax: ["input/TeX", "output/HTML-CSS"],
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                    processEscapes: true
+                },
+                "HTML-CSS": { availableFonts: ["TeX"] }
+            });
+        </script>
+        <script type="text/javascript" src="js/MathJax/MathJax.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="js/Highlight.js/styles/default.css">
+        <script src="js/Highlight.js/highlight.pack.js" type="text/javascript"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+
+    <body id="top">
+        <div id="main-wrap">
+            <h1>Introduction to Cryptography @ Coursera</h1>
+            <h2 class="sub-h2">A cheat sheet</h2>
+
+            <p>This cheatsheet wants to provide an overview of the concepts and the
+            used formulas and definitions of the <em>»Introduction to Cryptography«</em>
+            <a href="https://www.coursera.org/learn/cryptography/" title="Coursera Online
+                Course: Machine Learning">online course at coursera</a>.</p>
+
+            <div id="last-change">
+                <p>Last changed: <time datetime="2016-03-8">March 8th, 2016</time></p>
+            </div>
+
+            <h2 class="week-indicator" id="week-1">Week 1<a
+                    class="anchor-link" href="#week-1"></a></h2>
+
+            <h3 id="notation">Notes on Notation<a class="anchor-link" href="#notation"></a></h3>
+            <p>Note that both $\leftarrow$ and $:=$ are used as assignments. However,
+            $\leftarrow$ denotes assignments where subsequent execution of the right side
+            might not yield the same result, meaning it is possibly randomized. $:=$ is
+            used for deterministic assignments. $=$ is used for mathematical equality.</p>
+
+            <h3 id="mod-ar">Overview of Modular Arithmetic<a class="anchor-link"
+                    href="#mod-ar"></a></h3>
+            <ul>
+                <li>$x = x' \mod N$ if and only if $N$ divides by $x-x'$.</li>
+                <li>$\left[x \mod N\right]$ denotes the remainder when $x$ is divided by
+                    $N$ (the unique value $x' \in \{0,…,N-1\}$ such that $x = x' \mod N$).</li>
+            </ul>
+
+            <h3 id="intro">Introduction<a class="anchor-link" href="#intro"></a></h3>
+
+            <h4 class="definition" id="def-pk">Private-key Encryption<a
+                    class="anchor-link" href="#def-pk"></a></h4>
+            <p>For a <em>message space</em> $M$ the private key encryption scheme is
+            defined by a number of algorithms:</p>
+            <ul>
+                <li>Gen: the key generation algorithm yielding $k$</li>
+                <li>Enc: the encryption algorithm taking key $k$, message $m \in M$
+                    as input. Outputs ciphertext $c$: $c \leftarrow \text{Enc}_k(m)$</li>
+                <li>Dec: the decryption algorithm takes key $k$, ciphertext $c$ as input,
+                    yielding either $m$ or an <em>error</em>: $m := \text{Dec}_k(c)$</li>
+            </ul>
+
+            <p>Any encryption scheme is required to satisfy the following correctness
+            requirement:
+            $\forall m \in M$, $k$ given by $\text{Gen}: \;\;\;
+            \text{Dec}_k(\text{Enc}_k(m)) = m$</p>
+
+            <h4 class="example" id="ex-shift">Example: The Shift Cipher<a
+                    class="anchor-link" href="#ex-shift"></a></h4>
+            <p>Considering the encryption of english text (only lower case characters).
+            <code>a</code> is associated with $0$, <code>b</code> with $1$ and so on.
+            $k \in \{1,2,…,25\}$. To encrypt using the key $k$, shift every
+            letter of the plaintext message by $k$ positions (with wraparound). Decryption
+            is just the reverse operation.</p>
+
+            <p>More formally, the scheme can be defined as:</p>
+            <ul>
+                <li>$M = \{$ strings over lowercase English alphabet $\}$</li>
+                <li>$\text{Gen}$: choose uniformly $k\in\{0,…,25\}$</li>
+                <li>$\text{Enc}_k(m_1, …, m_t)$: output $c_1,…,c_t$ where
+                    $c_i := \left[ m_i + k \mod 26 \right]$</li>
+                <li>$\text{Dec}_k(c_1,…,c_t)$: output $m_1, …, m_t$ where
+                    $m_i := \left[c_i - k \mod 26\right]$</li>
+            </ul>
+
+            <p>Note that the scheme is not safe as an attacker can simply try all possible
+            keys. This assumes however, that the attacker does know which scheme was used
+            in the first place.</p>
+
+            <h4 class="example" id="def-kp">Definition: Kerckhoff's Principle<a
+                    class="anchor-link" href="#def-kp"></a></h4>
+            <p>The encryption scheme itself is not secret. The only secret is the key
+            which must be chosen at random and kept secret. This principle is
+            subject to controversion. Arguments in favor of this principle however
+            include that it is easier to change the key than to change the algorithm,
+            that it is easier to keep the key secret than the algorithm for two
+            participators. Additionally it is easier to deploy and its open approach
+            leads to public validation if the algorithm is known.</p>
+
+            <p>Note that the key space should be large enough to prevent brute force and
+            exhaustive search attacks. However, a large key space does not guarantee
+            safety.</p>
+
+            <footer class="main-foot">
+                <ul>
+                    <li><a href="#top">Back to top</a></li>
+                    <li><a href="http://www.kopimi.com/kopimi" title="kopimi"><img
+                            src="img/kopimi.svg" class="kopimi" alt="kopimi"></a></li>
+                    <li>By Christian Schulze<br><a href="http://andinfinity.de">andinfinity.de</a></li>
+                </ul>
+            </footer>
+        </div>
+    </body>
+</html>
