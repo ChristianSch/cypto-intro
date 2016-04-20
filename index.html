@@ -147,6 +147,58 @@
             <p>There are better (but more complicated) attacks available for this scheme,
             however this attack will work for long enough Vigenère ciphers.</p>
 
+            <h4 class="example" id="as-bvc">Breaking the Vigenère Cipher<a
+                    class="anchor-link" href="#as-bvc"></a></h4>
+            <h5>Variant Vigenère Cipher</h5>
+            <p>An alternative variant of the cipher views the message as ASCII plaintext
+            and the ciphertext as hex. This way it supports arbitrary letters (punctuation
+            and capitals). Instead of modulo we can use <code>XOR</code>.</p>
+
+            <p>The key is a string of bytes. The plaintext is a string of ASCII chars.
+            To encrypt, XOR each character in the plaintext with the next character of
+            the key, which is wrapped around as needed. Decryption again just is the
+            reverse process.</p>
+
+            <h6>Example</h6>
+            <ul>
+                <li>Plaintext: <code>Hello!</code> (hex: <code>0x48 65 6C 6C 6F 21</code>)</li>
+                <li>Key: <code>0xA1 2F</code></li>
+                <li>Encrypt by using XOR with <code>0xA1 2F A1 2F A1 2F</code></li>
+                <li>Take as an example: <code>0x48</code> $\oplus$ <code>0xA1</code><br>
+                    This can be expressed as: <code>0100 1000</code>
+                    $\oplus$ <code>1010 0001 = 1110 1001 = 0xE9</code></li>
+                <li>The ciphertext then is: <code>0xE9 4A CD 43 CE 0E</code></li>
+            </ul>
+
+            <h5>Attacking the Variant Cipher</h5>
+            <p>Basically we need two steps:</p>
+            <ul>
+                <li>Determine the key length</li>
+                <li>Determine each byte of the key</li>
+            </ul>
+
+            <h6>Determining the Key Length</h6>
+            <p>Let $p_i$ (for $0 \leq i \leq 255$) be the frequency of byte $i$ in
+            plaintext (English text)</p>
+            <ul>
+                <li>i.e., $p_i = 0$ for $i < 32$ or $i > 127$ (non printable chars)</li>
+                <li>i.e., $p_{97} = $ frequency of <code>a</code></li>
+            </ul>
+            <p>If the key length is $N$ then every $N$th character of the plaintext is
+            encrypted using the same <em>shift</em>. If we take every $N$th character and
+            calculate frequencies, we should get the $p_i$'s in permuted order.
+            If we take every $M$th character ($M$ not a multiple of $N$) and calculate
+            frequencies, we should get something close to uniform. In this case $M$ can
+            be dismissed as the key length because it is not a permutation of the
+            frequencies of english text.</p>
+            <p>To distinguish these two, compute $\sum q_i^2$ for some candidate
+            distribution $q_0, …, q_{255}$. If it is close to uniform it is
+            roughly $\frac{1}{256}$. If it is a permutation of $p_i$, then
+            $\sum q_i^2 \approx \sum p_i^2$ and it will be much larger than $\frac{1}{256}$.
+            </p>
+            <p>In order to find the key length we compute $\sum q_i^2$ and choose the
+            maximum value for a candidate length.</p>
+
             <footer class="main-foot">
                 <ul>
                     <li><a href="#top">Back to top</a></li>
